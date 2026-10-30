@@ -28,6 +28,18 @@ class Inventory(Stock):
                 return f"{name} left is: {answer}"
         return f"{name} not found"
 
+    def full_up(self,name, add):
+        found = False
+        for i in range(len(self.box)):
+            if f"item {name}" in self.box[i]:
+                part = self.box[i].split(", value is: ")
+                current_value = int(part[1])
+
+                answer = current_value + int(add)
+                self.box[i] = f"item {name}, value is: {answer}"
+                return f"{name} left is: {answer}"
+        return f"{name} not found"
+
     def show(self):
         return "\n".join(self.box)
     
@@ -48,7 +60,7 @@ class Inventory(Stock):
 stock = Inventory()
 
 while True:
-    print("1.add item 2.sale off 3.show 4.save 5.load 6.exit")
+    print("1.add item 2.sale off 3.full stock 4.show 5.save 6.load 7.exit")
     x = input("type: ")
 
     if x == "1":
@@ -57,7 +69,6 @@ while True:
         stock.add_stock(y, x)
         print()
 
-
     if x == "2":
         y = input("enter name (item)")
         x = input("enter how many you sale off")
@@ -65,14 +76,20 @@ while True:
         print()
 
     if x == "3":
-        print(stock.show())
+        y = input("enter name(item)")
+        x = input("how many you want to add")
+        print(stock.full_up(y, x))
         print()
 
     if x == "4":
+        print(stock.show())
+        print()
+
+    if x == "5":
         stock.save("stock.txt")
         print(stock.show())
 
-    if x == "5":
+    if x == "6":
         try:
             stock.load("stock.txt")
             print(stock.show())
@@ -80,6 +97,5 @@ while True:
         except FileNotFoundError:
             print("file not found")
 
-    if x == "6":
+    if x == "7":
         break
-
